@@ -19,6 +19,8 @@
 */
 
 #include "Viewer.h"
+#include <chrono>
+#include <thread>
 #include <pangolin/pangolin.h>
 
 #include <mutex>
@@ -53,6 +55,8 @@ Viewer::Viewer(System* pSystem, FrameDrawer *pFrameDrawer, MapDrawer *pMapDrawer
 
 void Viewer::Run()
 {
+    cout << "Viewer::Run " << endl;
+
     mbFinished = false;
     mbStopped = false;
 

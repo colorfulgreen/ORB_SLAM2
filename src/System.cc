@@ -22,6 +22,7 @@
 
 #include "System.h"
 #include "Converter.h"
+#include <chrono>
 #include <thread>
 #include <pangolin/pangolin.h>
 #include <iomanip>
@@ -99,7 +100,8 @@ System::System(const string &strVocFile, const string &strSettingsFile, const eS
     if(bUseViewer)
     {
         mpViewer = new Viewer(this, mpFrameDrawer,mpMapDrawer,mpTracker,strSettingsFile);
-        mptViewer = new thread(&Viewer::Run, mpViewer);
+        // TODO Workaround for "Terminating app due to uncaught exception 'NSInternalInconsistencyException', reason: 'nextEventMatchingMask should only be called from the Main Thread!'"
+        // mptViewer = new thread(&Viewer::Run, mpViewer);
         mpTracker->SetViewer(mpViewer);
     }
 
@@ -266,6 +268,12 @@ cv::Mat System::TrackMonocular(const cv::Mat &im, const double &timestamp)
     mTrackedKeyPointsUn = mpTracker->mCurrentFrame.mvKeysUn;
 
     return Tcw;
+}
+
+void System::RunViewer()
+{
+    cout << "###### RunViewer" << mpViewer << endl;
+    mpViewer->Run();
 }
 
 void System::ActivateLocalizationMode()
